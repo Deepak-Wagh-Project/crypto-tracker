@@ -1,26 +1,74 @@
-import React from "react";
-import "./style.css"
-import TemporaryDrawer from "./drawer";
-import Button from "../Button";
-import { NavLink } from "react-router-dom";
+import { Switch } from "@mui/material";
+import React, { useState } from "react";
+import Button from "../Button/Button";
+import MobileDrawer from "./Drawer";
+import "./styles.css";
 
-const Header=()=>{
+function Header() {
+  const setDark = () => {
+    localStorage.setItem("theme", "dark");
+    document.documentElement.setAttribute("data-theme", "dark");
+  };
 
-    return (<div className="navbar">
-     <h1 className="logo">Cryptotracker <span style={{color:"blue"}}> . </span></h1>
-     <div className="links">
-       <NavLink to="/" className="link"><p>Home</p></NavLink>
-       <NavLink to="/compare" className="link"><p>Compare</p></NavLink>
-       <NavLink to="/dashboard" className="link"><Button text={"Dashboard"}
-        onClick={()=>console.log("Buttton is clicked")}
-        outline={true}
-        /></NavLink>
+  const setLight = () => {
+    localStorage.setItem("theme", "light");
+    document.documentElement.setAttribute("data-theme", "light");
+  };
 
-     </div>
-     <div className="mobile-drawer">
-        <TemporaryDrawer/>
-     </div>
+  const storedTheme = localStorage.getItem("theme");
 
-    </div>)
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const defaultDark =
+    storedTheme === "dark" || (storedTheme === null && prefersDark);
+
+  if (defaultDark) {
+    setDark();
+  }
+
+  const [mode, setMode] = useState(defaultDark ? true : false);
+
+  const toggleTheme = (e) => {
+    if (!mode) {
+      setDark();
+    } else {
+      setLight();
+    }
+    setMode(!mode);
+  };
+
+  return (
+    <div className="navbar">
+      <h1 className="heading">
+        <a href="/">
+          CryptoTracker<span style={{ color: "var(--blue)" }}>.</span>
+        </a>
+      </h1>
+      <div className="links">
+        <Switch
+          checked={!mode}
+          onClick={(e) => {
+            toggleTheme();
+          }}
+        />
+        <a href="/">
+          <p className="link">Home</p>
+        </a>
+        <a href="/compare">
+          <p className="link">Compare</p>
+        </a>
+        <a href="/watchlist">
+          <p className="link">Watchlist</p>
+        </a>
+        <a href="/dashboard">
+          <Button text="dashboard" />
+        </a>
+      </div>
+      <MobileDrawer />
+    </div>
+  );
 }
+
 export default Header;

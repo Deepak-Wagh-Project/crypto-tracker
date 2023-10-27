@@ -1,11 +1,16 @@
 import React from "react";
+import Footer from "../components/Common/Footer/footer";
 import Header from "../components/Common/Header";
-import MainComponent from "../components/LandingPage/MainComponents";
+import LandingIntro from "../components/LandingPage/Intro";
 
-const Home=()=>{
-    return<div>
-        <Header/>
-        <MainComponent/>
+function Home() {
+  return (
+    <div>
+      <Header />
+      <LandingIntro />
+      <Footer />
     </div>
+  );
 }
+
 export default Home;
